@@ -872,9 +872,6 @@ class modFileMediaSource extends modMediaSource implements modMediaSourceInterfa
             if ($mode) {
                 @chmod($newPath, $mode);
             }
-            //////////////////////////////////////////////////////////////////////////////////////
-            $this->uploaded_objects[]=str_replace($directory->getPath(),'',$newPath);
-            //////////////////////////////////////////////////////////////////////////////////////
         }
 
         /* invoke event */
