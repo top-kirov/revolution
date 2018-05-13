@@ -90,7 +90,7 @@ class modConnectorResponse extends modResponse {
         /* backwards compat */
         $error =& $this->modx->error;
         /* prevent browsing of subdirectories for security */
-        $target = preg_replace('/(\.+\/)+/', '', htmlspecialchars($options['action']));
+        $target = preg_replace('/[\.]{2,}/', '', htmlspecialchars($options['action']));
 
         $siteId = $this->modx->user->getUserToken($this->modx->context->get('key'));
         $isLogin = $target == 'login' || $target == 'security/login';
@@ -157,7 +157,7 @@ class modConnectorResponse extends modResponse {
                 $message = $this->_responseCodes[$this->responseCode];
             }
             header('Status: '.$this->responseCode.' '.$message);
-            header('Version: HTTP/1.1');
+            header('Version: ' . $_SERVER['SERVER_PROTOCOL']);
         }
         if (is_array($this->header)) {
             foreach ($this->header as $header) header($header);

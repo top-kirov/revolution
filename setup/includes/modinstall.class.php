@@ -52,7 +52,7 @@ class modInstall {
      */
     function __construct(array $options = array()) {
         if (isset ($_REQUEST['action'])) {
-            $this->action = $_REQUEST['action'];
+            $this->action = preg_replace('/[\.]{2,}/', '', htmlspecialchars($_REQUEST['action']));
         }
         if (is_array($options)) {
             $this->options = $options;
@@ -162,6 +162,11 @@ class modInstall {
             if (!($this->xpdo instanceof xPDO)) { return $this->xpdo; }
 
             $this->xpdo->setOption('cache_path',MODX_CORE_PATH . 'cache/');
+
+            $config_options = (array)$this->settings->get('config_options');
+            foreach ($config_options as $config_option => $config_value) {
+                $this->xpdo->setOption($config_option, $config_value);
+            }
 
             if ($mode === modInstall::MODE_UPGRADE_REVO_ADVANCED) {
                 if ($this->xpdo->connect()) {

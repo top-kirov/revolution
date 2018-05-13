@@ -18,6 +18,7 @@ $_lang['file_download_unzip'] = 'Pura tiedosto';
 $_lang['file_edit'] = 'Muokkaa tiedostoa';
 $_lang['file_err_ae'] = 'Tiedostoa %s jo olemassa';
 $_lang['file_err_chmod'] = 'Tuntematon virhe yritettäessä chmod kohde.';
+$_lang['file_err_chmod_invalid'] = 'An invalid chmod value was passed while trying to chmod the target.';
 $_lang['file_err_chmod_ns'] = 'Määritä chmod tila.';
 $_lang['file_err_create'] = 'Tuntematon virhe luotaessa tiedostoa.';
 $_lang['file_err_ext_not_allowed'] = 'Tiedostomuoto `[[+ext]]` ei ole sallittu.';

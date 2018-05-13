@@ -11,7 +11,7 @@ class WebLinkUpdateManagerController extends ResourceUpdateManagerController {
     public function loadCustomCssJs() {
         $managerUrl = $this->context->getOption('manager_url', MODX_MANAGER_URL, $this->modx->_userConfig);
         $this->addJavascript($managerUrl.'assets/modext/widgets/element/modx.panel.tv.renders.js');
-        $this->addJavascript($managerUrl.'assets/modext/widgets/resource/modx.grid.resource.security.js');
+        $this->addJavascript($managerUrl.'assets/modext/widgets/resource/modx.grid.resource.security.local.js');
         $this->addJavascript($managerUrl.'assets/modext/widgets/resource/modx.panel.resource.tv.js');
         $this->addJavascript($managerUrl.'assets/modext/widgets/resource/modx.panel.resource.js');
         $this->addJavascript($managerUrl.'assets/modext/widgets/resource/modx.panel.resource.weblink.js');
@@ -46,7 +46,7 @@ class WebLinkUpdateManagerController extends ResourceUpdateManagerController {
         /* load RTE */
         $this->loadRichTextEditor();
     }
-    
+
     /**
      * Return the location of the template file
      * @return string
@@ -57,7 +57,7 @@ class WebLinkUpdateManagerController extends ResourceUpdateManagerController {
 
     public function process(array $scriptProperties = array()) {
         $placeholders = parent::process($scriptProperties);
-        $this->resourceArray['responseCode'] = $this->resource->getProperty('responseCode','core','HTTP/1.1 301 Moved Permanently');
+        $this->resourceArray['responseCode'] = $this->resource->getProperty('responseCode','core',$_SERVER['SERVER_PROTOCOL'] . ' 301 Moved Permanently');
         return $placeholders;
     }
 }

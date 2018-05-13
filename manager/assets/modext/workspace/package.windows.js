@@ -13,6 +13,7 @@ MODx.window.PackageUninstall = function(config) {
         // ,height: 400
         // ,width: 400
         ,id: 'modx-window-package-uninstall'
+        ,cls: 'modx-confirm'
         ,saveBtnText: _('uninstall')
         ,fields: [{
             html: _('preexisting_mode_select')
@@ -65,6 +66,7 @@ MODx.window.RemovePackage = function(config) {
         ,baseParams: {
             action: 'workspace/packages/uninstall'
         }
+        ,cls: 'modx-confirm'
         ,defaults: { border: false }
         ,fields: [{
             xtype: 'hidden'
@@ -141,6 +143,7 @@ MODx.window.SetupOptions = function(config) {
 		,layout: 'form'
 		,width: 650
 		,autoHeight: true
+		,cls: 'modx-confirm'
 		,items:[{
 			xtype: 'modx-template-panel'
 			,id: 'modx-setupoptions-panel'
@@ -176,7 +179,7 @@ Ext.extend(MODx.window.SetupOptions,MODx.Window,{
 		this.hide();
 		var options = Ext.getCmp('modx-setupoptions-form').getForm().getValues();
         options.signature = this.signature;
-		Ext.getCmp('modx-panel-packages').install( options );
+		Ext.getCmp('modx-panel-packages').install(btn, ev, options);
 	}
 });
 Ext.reg('modx-package-setupoptions', MODx.window.SetupOptions);

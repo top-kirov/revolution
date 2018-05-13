@@ -1,6 +1,21 @@
 This file shows the changes in this release of xPDO.
 
-xPDO 2.5.3-pl (Jaunary 3, 2017)
+xPDO 2.7.0-pl (May 2, 2018)
+====================================
+- Fix xPDOIterator failure when fetch returns null due to object hydration
+- Make json and array phptypes quotable in xPDOQuery
+- Replace all deprecated while/each() loops with foreach() loops for PHP 7.2 compat
+
+xPDO 2.6.0-pl (November 1, 2017)
+====================================
+- Generate engine into the map files for MySQL
+- Make InnoDB the default engine for MySQL
+- Add missing return statements to built-in validation classes
+- Remove all embedded escape characters when escape() is used on a string
+- Make sure empty cache file does not return true in PHP format
+- Make sure FileCache uses file/folder permissions options + add optional overrides
+
+xPDO 2.5.3-pl (January 3, 2017)
 ====================================
 - Make sure xPDOQuery base class is always loaded
 

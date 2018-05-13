@@ -34,7 +34,7 @@ class modUnpackProcessor extends modProcessor {
         }
 
         $target = $this->source->getBasePath().$this->properties['file'];
-        $target = preg_replace('/(\.+\/)+/', '', htmlspecialchars($target));
+        $target = preg_replace('/[\.]{2,}/', '', htmlspecialchars($target));
         $fileobj = $this->modx->fileHandler->make($target);
 
         if (!$this->validate($fileobj)) {
@@ -42,7 +42,7 @@ class modUnpackProcessor extends modProcessor {
         }
 
         // currently the archive content is extracted to the folder where the archive is stored
-        if (!$fileobj->unpack($this->source->getBasePath().dirname($this->properties['file']))) {
+        if (!$fileobj->unpack(dirname($target))) {
             return $this->failure($this->modx->lexicon('file_err_unzip'));
         }
 
@@ -56,7 +56,8 @@ class modUnpackProcessor extends modProcessor {
      */
     public function validate(modFileSystemResource $fileobj) {
 
-        if (empty($this->source->getBasePath())) {
+        $path = $fileobj->getPath();
+        if (empty($path)) {
             $this->addFieldError('path', $this->modx->lexicon('file_folder_err_invalid_path'));
         }
 
