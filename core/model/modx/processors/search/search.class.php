@@ -147,6 +147,20 @@ class modSearchProcessor extends modProcessor
      */
     public function searchResources()
     {
+    	$corePath = $this->modx->getOption('collections.core_path', null, $this->modx->getOption('core_path', null, MODX_CORE_PATH) . 'components/collections/');
+		/** @var Collections $collections */
+		$collections = $this->modx->getService(
+		    'collections',
+		    'Collections',
+		    $corePath . 'model/collections/',
+		    array(
+		        'core_path' => $corePath
+		    )
+		);
+    	
+    	
+    	
+    	
         $type = 'resources';
         $typeLabel = $this->modx->lexicon('search_resulttype_' . $type);
 
@@ -157,32 +171,41 @@ class modSearchProcessor extends modProcessor
         }
 
         $c = $this->modx->newQuery('modResource');
+        $c->leftJoin('modTemplate','modTemplate','modResource.template=modTemplate.id');
+        $c->leftJoin('CollectionSelection','CollectionSelection','CollectionSelection.resource=modResource.id');
+        $c->leftJoin('modResource','Collection','CollectionSelection.collection=Collection.id');
+        $c->select($this->modx->getSelectColumns('modResource','modResource').", modTemplate.icon as icon, modTemplate.templatename as tplname, GROUP_CONCAT(Collection.pagetitle SEPARATOR '||') as collections");
         $c->where(array(
             array(
-                'pagetitle:LIKE' => '%' . $this->query .'%',
-                'OR:longtitle:LIKE' => '%' . $this->query .'%',
-                'OR:alias:LIKE' => '%' . $this->query .'%',
-                'OR:description:LIKE' => '%' . $this->query .'%',
-                'OR:introtext:LIKE' => '%' . $this->query .'%',
-                'OR:id:=' => $this->query,
+                'modResource.pagetitle:LIKE' => '%' . $this->query .'%',
+                'OR:modResource.longtitle:LIKE' => '%' . $this->query .'%',
+                'OR:modResource.alias:LIKE' => '%' . $this->query .'%',
+                'OR:modResource.description:LIKE' => '%' . $this->query .'%',
+                'OR:modResource.introtext:LIKE' => '%' . $this->query .'%',
+                'OR:modResource.id:=' => $this->query,
             ),
             array(
-                'context_key:IN' => $contextKeys,
+                'modResource.context_key:IN' => $contextKeys,
             )
         ));
-        $c->sortby('createdon', 'DESC');
+        $c->sortby('modResource.pagetitle', 'ASC');
+        $c->groupby('modResource.id');
 
         $c->limit($this->maxResults);
 
         $collection = $this->modx->getCollection('modResource', $c);
         /** @var modResource $record */
         foreach ($collection as $record) {
+        	$tplname=preg_replace('/^[\d\s-]+/','',$record->get('tplname'));
+        	$collections=implode(", ",array_diff(explode('||',$record->get('collections')),array("")));
+        	$title = $record->get('pagetitle');
             $this->results[] = array(
-                'name' => $this->modx->hasPermission('tree_show_resource_ids') ? $record->get('pagetitle') . ' (' . $record->get('id') . ')' : $record->get('pagetitle'),
+                'name' => $this->modx->hasPermission('tree_show_resource_ids') ? $title . ' (' . $record->get('id') . ')' : $title,
                 '_action' => 'resource/update&id=' . $record->get('id'),
-                'description' => $record->get('description'),
+                'description' => $record->get('description').($tplname?' ('.$tplname.')':'').($collections?' ('.$collections.')':''),
                 'type' => $type,
                 'type_label' => $typeLabel,
+                'icon' => $record->get('icon')?(str_replace('icon-','',$record->get('icon'))):false
             );
         }
     }

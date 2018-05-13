@@ -1342,4 +1342,12 @@ class modResource extends modAccessibleSimpleObject implements modResourceInterf
         $cache->delete($key, array('deleteTop' => true));
         $cache->delete($key);
     }
+    
+    public function remove(array $ancestors=array())
+    {
+    	if(method_exists($this->xpdo,'invokeEvent'))$this->xpdo->invokeEvent('OnResourceBeforeRemove', array ('resource' => &$this));
+    	$res = parent::remove();
+    	if(method_exists($this->xpdo,'invokeEvent'))$this->xpdo->invokeEvent('OnResourceAfterRemove', array ('resource' => &$this));
+    	return $res;
+    }
 }

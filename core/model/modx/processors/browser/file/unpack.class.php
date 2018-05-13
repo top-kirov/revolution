@@ -28,8 +28,12 @@ class modUnpackProcessor extends modProcessor {
     public function process() {
 
         $this->modx->getService('fileHandler', 'modFileHandler');
+        $loaded = $this->getSource();
+        if (!($this->source instanceof modMediaSource)) {
+            return $this->failure($loaded);
+        }
 
-        $target = $this->properties['path'] . $this->properties['file'];
+        $target = $this->source->getBasePath().$this->properties['file'];
         $target = preg_replace('/(\.+\/)+/', '', htmlspecialchars($target));
         $fileobj = $this->modx->fileHandler->make($target);
 
@@ -38,7 +42,7 @@ class modUnpackProcessor extends modProcessor {
         }
 
         // currently the archive content is extracted to the folder where the archive is stored
-        if (!$fileobj->unpack($this->properties['path'] . dirname($this->properties['file']))) {
+        if (!$fileobj->unpack($this->source->getBasePath().dirname($this->properties['file']))) {
             return $this->failure($this->modx->lexicon('file_err_unzip'));
         }
 
@@ -52,7 +56,7 @@ class modUnpackProcessor extends modProcessor {
      */
     public function validate(modFileSystemResource $fileobj) {
 
-        if (empty($this->properties['path'])) {
+        if (empty($this->source->getBasePath())) {
             $this->addFieldError('path', $this->modx->lexicon('file_folder_err_invalid_path'));
         }
 
@@ -65,6 +69,18 @@ class modUnpackProcessor extends modProcessor {
         }
 
         return !$this->hasErrors();
+    }
+    
+    public function getSource() {
+        $source = $this->getProperty('source',1);
+        /** @var modMediaSource $source */
+        $this->modx->loadClass('sources.modMediaSource');
+        $this->source = modMediaSource::getDefaultSource($this->modx,$source);
+        if (!$this->source->getWorkingContext()) {
+            return $this->modx->lexicon('permission_denied');
+        }
+        $this->source->setRequestProperties($this->getProperties());
+        return $this->source->initialize();
     }
 }
 
