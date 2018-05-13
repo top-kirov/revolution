@@ -106,6 +106,13 @@ Ext.onReady(function() {
                 }
             }
         }
+        ,listeners:{beforeadd:function(that,component,index){
+        	if(Ext.get(component.contentEl).child('.modx-tv:not([style*=\"display: none\"])')==null)return false;
+        },afterrender:function(that){
+        	if(that.items.length===0){
+        		Ext.getCmp("modx-resource-tabs").hideTabStripItem('modx-panel-resource-tv');
+        	}
+        }}
     });
     {/literal}{/if}
 

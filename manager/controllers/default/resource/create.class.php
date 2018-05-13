@@ -92,23 +92,23 @@ class ResourceCreateManagerController extends ResourceManagerController {
 
         /* initialize FC rules */
         $overridden = array();
-
+		
         /* set default template */
         if (empty($reloadData)) {
             $defaultTemplate = $this->getDefaultTemplate();
             $this->resourceArray = array_merge($this->resourceArray,array(
-                'template' => $defaultTemplate,
-                'content_type' => $this->context->getOption('default_content_type',1,$this->modx->_userConfig),
-                'class_key' => $this->resourceClass,
-                'context_key' => $this->ctx,
-                'parent' => $this->parent->get('id'),
-                'richtext' =>  $this->context->getOption('richtext_default', true, $this->modx->_userConfig),
-                'hidemenu' => $this->context->getOption('hidemenu_default', 0, $this->modx->_userConfig),
-                'published' => $this->context->getOption('publish_default', 0, $this->modx->_userConfig),
-                'searchable' => $this->context->getOption('search_default', 1, $this->modx->_userConfig),
-                'cacheable' => $this->context->getOption('cache_default', 1, $this->modx->_userConfig),
-                'syncsite' => $this->context->getOption('syncsite_default', 1, $this->modx->_userConfig),
-            ));
+		        'template' => $defaultTemplate,
+		        'content_type' => isset($this->scriptProperties['content_type'])?$this->scriptProperties['content_type']:$this->context->getOption('default_content_type',1,$this->modx->_userConfig),
+		        'class_key' => $this->resourceClass,
+		        'context_key' => $this->ctx,
+		        'parent' => $this->parent->get('id'),
+		        'richtext' => isset($this->scriptProperties['richtext'])?$this->scriptProperties['richtext']:$this->context->getOption('richtext_default', true, $this->modx->_userConfig),
+		        'hidemenu' => isset($this->scriptProperties['hidemenu'])?$this->scriptProperties['hidemenu']:$this->context->getOption('hidemenu_default', 0, $this->modx->_userConfig),
+		        'published' => isset($this->scriptProperties['published'])?$this->scriptProperties['published']:$this->context->getOption('publish_default', 0, $this->modx->_userConfig),
+		        'searchable' => isset($this->scriptProperties['searchable'])?$this->scriptProperties['searchable']:$this->context->getOption('search_default', 1, $this->modx->_userConfig),
+		        'cacheable' => isset($this->scriptProperties['cacheable'])?$this->scriptProperties['cacheable']:$this->context->getOption('cache_default', 1, $this->modx->_userConfig),
+		        'syncsite' => isset($this->scriptProperties['syncsite'])?$this->scriptProperties['syncsite']:$this->context->getOption('syncsite_default', 1, $this->modx->_userConfig),
+		    ));
 
             // Allow certain fields to be prefilled from the OnDocFormRender plugin event
             $newValuesArr = array();
@@ -152,7 +152,6 @@ class ResourceCreateManagerController extends ResourceManagerController {
             /* check FC rules */
             $overridden = $this->checkFormCustomizationRules($this->resource);
         }
-
         /* apply FC rules */
         $this->resourceArray = array_merge($this->resourceArray,$overridden);
 
@@ -183,7 +182,7 @@ class ResourceCreateManagerController extends ResourceManagerController {
 
         /* single-use token for creating resource */
         $this->setResourceToken();
-
+        
         return $placeholders;
     }
 

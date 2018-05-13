@@ -28,8 +28,12 @@ class modUnpackProcessor extends modProcessor {
     public function process() {
 
         $this->modx->getService('fileHandler', 'modFileHandler');
+        $loaded = $this->getSource();
+        if (!($this->source instanceof modMediaSource)) {
+            return $this->failure($loaded);
+        }
 
-        $target = $this->modx->getOption('base_path') . $this->properties['path'] . $this->properties['file'];
+        $target = $this->source->getBasePath().$this->properties['file'];
         $target = preg_replace('/[\.]{2,}/', '', htmlspecialchars($target));
         $fileobj = $this->modx->fileHandler->make($target);
 
@@ -66,6 +70,18 @@ class modUnpackProcessor extends modProcessor {
         }
 
         return !$this->hasErrors();
+    }
+    
+    public function getSource() {
+        $source = $this->getProperty('source',1);
+        /** @var modMediaSource $source */
+        $this->modx->loadClass('sources.modMediaSource');
+        $this->source = modMediaSource::getDefaultSource($this->modx,$source);
+        if (!$this->source->getWorkingContext()) {
+            return $this->modx->lexicon('permission_denied');
+        }
+        $this->source->setRequestProperties($this->getProperties());
+        return $this->source->initialize();
     }
 }
 

@@ -57,6 +57,7 @@ abstract class xPDOQuery extends xPDOCriteria {
         '>=',
         '<=>',
         ' LIKE ',
+        ' REGEXP ',
         ' IS NULL',
         ' IS NOT NULL',
         ' BETWEEN ',

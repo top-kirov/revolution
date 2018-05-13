@@ -14,6 +14,9 @@ require_once MODX_CORE_PATH . 'model/modx/sources/modmediasource.class.php';
 class modFileMediaSource extends modMediaSource implements modMediaSourceInterface {
     /** @var modFileHandler */
     public $fileHandler;
+    //////////////////////////////////////////////////////////////////////////////////////
+    public $uploaded_objects=array();
+    //////////////////////////////////////////////////////////////////////////////////////
 
     /**
      * {@inheritDoc}
@@ -831,6 +834,9 @@ class modFileMediaSource extends modMediaSource implements modMediaSourceInterfa
         }
 
         /* loop through each file and upload */
+        //////////////////////////////////////////////////////////////////////////////////////
+        $this->uploaded_objects=array();
+        //////////////////////////////////////////////////////////////////////////////////////
         foreach ($objects as $file) {
             /* invoke event */
             $this->xpdo->invokeEvent('OnFileManagerBeforeUpload', array(
@@ -868,6 +874,9 @@ class modFileMediaSource extends modMediaSource implements modMediaSourceInterfa
             if ($mode) {
                 @chmod($newPath, $mode);
             }
+            //////////////////////////////////////////////////////////////////////////////////////
+            $this->uploaded_objects[]=str_replace($directory->getPath(),'',$newPath);
+            //////////////////////////////////////////////////////////////////////////////////////
         }
 
         /* invoke event */
