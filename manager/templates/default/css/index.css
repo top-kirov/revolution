@@ -4709,6 +4709,7 @@ input::-moz-focus-inner {
   .x-form-item .modx-tv-image-preview {
     margin-top: 7px; }
     .x-form-item .modx-tv-image-preview img {
+      background: #ccc;
       display: block; }
   .x-form-item .modx-tag-list {
     list-style: none;

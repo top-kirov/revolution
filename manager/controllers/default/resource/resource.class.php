@@ -412,6 +412,7 @@ abstract class ResourceManagerController extends modManagerController {
     public function fireOnTVFormRender() {
         $onResourceTVFormPrerender = $this->modx->invokeEvent('OnResourceTVFormPrerender',array(
             'resource' => $this->resource->get('id'),
+            'template' => $this->resource->get('template')
         ));
         if (is_array($onResourceTVFormPrerender)) {
             $onResourceTVFormPrerender = implode('',$onResourceTVFormPrerender);
