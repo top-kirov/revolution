@@ -108,7 +108,7 @@ class ResourceCreateManagerController extends ResourceManagerController {
 		        'searchable' => isset($this->scriptProperties['searchable'])?$this->scriptProperties['searchable']:$this->context->getOption('search_default', 1, $this->modx->_userConfig),
 		        'cacheable' => isset($this->scriptProperties['cacheable'])?$this->scriptProperties['cacheable']:$this->context->getOption('cache_default', 1, $this->modx->_userConfig),
 		        'syncsite' => isset($this->scriptProperties['syncsite'])?$this->scriptProperties['syncsite']:$this->context->getOption('syncsite_default', 1, $this->modx->_userConfig),
-		    ));
+            ));
 
             // Allow certain fields to be prefilled from the OnDocFormRender plugin event
             $newValuesArr = array();

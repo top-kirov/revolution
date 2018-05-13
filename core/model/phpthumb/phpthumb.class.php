@@ -1676,6 +1676,7 @@ class phpthumb {
 					}
 				}
 
+
 				/*** FIX from https://github.com/FLEXIcontent/flexicontent-cck/commit/f27a74bf0c840d9b9c9d7e05487d42bce302b586 ***/
 				ob_start();
 				$getimagesize = getimagesize($this->sourceFilename);
@@ -1683,14 +1684,13 @@ class phpthumb {
 				ob_end_clean();
 				if (!is_null($this->dpi) && $this->ImageMagickSwitchAvailable('density')) {
 					// for vector source formats only (WMF, PDF, etc)
-					if (!is_array($getimagesize) || $getimagesize[2] != IMAGETYPE_PNG)
+					if (!is_array($getimagesize) || !in_array($getimagesize[2],array(IMAGETYPE_PNG,IMAGETYPE_ICO)))
 					{
 						$commandline .= ' -flatten';
 					}
 					$commandline .= ' -density '.phpthumb_functions::escapeshellarg_replacement($this->dpi);
 				}
 				/***********************************************************************************************************/
-				
 				if (is_array($getimagesize)) {
 					$this->DebugMessage('getimagesize('.$this->sourceFilename.') SUCCEEDED: '.print_r($getimagesize, true), __FILE__, __LINE__);
 				} else {

@@ -689,6 +689,7 @@ class modResourceUpdateProcessor extends modObjectUpdateProcessor {
             $response = $this->modx->invokeEvent('OnResourceUndelete',array(
                 'id' => $this->object->get('id'),
                 'resource' => &$this->object,
+                'processor' => &$this,
             ));
         }
         return $response;
@@ -704,6 +705,7 @@ class modResourceUpdateProcessor extends modObjectUpdateProcessor {
             $this->modx->invokeEvent('OnResourceDelete',array(
                 'id' => $this->object->get('id'),
                 'resource' => &$this->object,
+                'processor' => &$this,
             ));
         }
         return $response;
