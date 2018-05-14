@@ -103,6 +103,10 @@ class modX extends xPDO {
      */
     public $event= null;
     /**
+     * @var boolean Indicates for event is invoked.
+     */
+    public $eventIsInvoked=false;
+    /**
      * @var array A map of elements registered to specific events.
      */
     public $eventMap= null;
@@ -1593,8 +1597,14 @@ class modX extends xPDO {
             //$this->log(modX::LOG_LEVEL_DEBUG,'System event '.$eventName.' was executed but does not exist.');
             return false;
         }
+        
+        $inInvokedEvent=false;
+        if($this->eventIsInvoked)$inInvokedEvent=true;
+        else $this->eventIsInvoked=true;
+        
         $results= array ();
         if (count($this->eventMap[$eventName])) {
+            if($this->event&&$inInvokedEvent)$invokedEvent=clone $this->event;
             $this->event= new modSystemEvent();
             foreach ($this->eventMap[$eventName] as $pluginId => $pluginPropset) {
                 $plugin= null;
@@ -1635,7 +1645,9 @@ class modX extends xPDO {
                     }
                 }
             }
+            if($invokedEvent&&$inInvokedEvent)$this->event = clone $invokedEvent;
         }
+        if(!$inInvokedEvent)$this->eventIsInvoked=false;
         return $results;
     }
 
